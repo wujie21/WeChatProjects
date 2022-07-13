@@ -8,7 +8,7 @@
   },
   "[javascript]": {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "HookyQR.beautify"
   },
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"

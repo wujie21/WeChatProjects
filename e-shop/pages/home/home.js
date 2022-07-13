@@ -1,5 +1,9 @@
-import { fetchHome } from '../../services/home/home';
-import { fetchGoodsList } from '../../services/good/fetchGoods';
+import {
+  fetchHome
+} from '../../services/home/home';
+import {
+  fetchGoodsList
+} from '../../services/good/fetchGoods';
 import Toast from 'tdesign-miniprogram/toast/index';
 
 Page({
@@ -13,19 +17,26 @@ Page({
     autoplay: true,
     duration: 500,
     interval: 5000,
-    navigation: { type: 'dots' },
+    navigation: {
+      type: 'dots'
+    },
   },
 
+  /* 商品列表分页 */
   goodListPagination: {
+    /* 当前页 */
     index: 0,
+    /* 总页数 */
     num: 20,
   },
 
   privateData: {
+    /* t-tabs：当前tab下标 */
     tabIndex: 0,
   },
 
   onShow() {
+    /* 初始化自定义tabBar */
     this.getTabBar().init();
   },
 
@@ -43,17 +54,23 @@ Page({
     this.init();
   },
 
+  /* 加载主页 */
   init() {
     this.loadHomePage();
   },
 
   loadHomePage() {
+    /* 停止当前页面下拉刷新。*/
     wx.stopPullDownRefresh();
 
     this.setData({
       pageLoading: true,
     });
-    fetchHome().then(({ swiper, tabList }) => {
+    /* 获取主页信息 */
+    fetchHome().then(({
+      swiper,
+      tabList
+    }) => {
       this.setData({
         tabList,
         imgSrcs: swiper,
@@ -63,6 +80,7 @@ Page({
     });
   },
 
+  /* 切换t-tabs事件处理函数 */
   tabChangeHandle(e) {
     this.privateData.tabIndex = e.detail;
     this.loadGoodsList(true);
@@ -72,14 +90,18 @@ Page({
     this.loadGoodsList();
   },
 
+  /* 加载商品列表 */
   async loadGoodsList(fresh = false) {
     if (fresh) {
+      /* 将页面滚动到目标位置，支持选择器和滚动距离两种方式定位 */
       wx.pageScrollTo({
         scrollTop: 0,
       });
     }
 
-    this.setData({ goodsListLoadStatus: 1 });
+    this.setData({
+      goodsListLoadStatus: 1
+    });
 
     const pageSize = this.goodListPagination.num;
     let pageIndex =
@@ -98,13 +120,19 @@ Page({
       this.goodListPagination.index = pageIndex;
       this.goodListPagination.num = pageSize;
     } catch (err) {
-      this.setData({ goodsListLoadStatus: 3 });
+      this.setData({
+        goodsListLoadStatus: 3
+      });
     }
   },
 
   goodListClickHandle(e) {
-    const { index } = e.detail;
-    const { spuId } = this.data.goodsList[index];
+    const {
+      index
+    } = e.detail;
+    const {
+      spuId
+    } = this.data.goodsList[index];
     wx.navigateTo({
       url: `/pages/goods/details/index?spuId=${spuId}`,
     });
@@ -119,11 +147,17 @@ Page({
   },
 
   navToSearchPage() {
-    wx.navigateTo({ url: '/pages/goods/search/index' });
+    wx.navigateTo({
+      url: '/pages/goods/search/index'
+    });
   },
 
-  navToActivityDetail({ detail }) {
-    const { index: promotionID = 0 } = detail || {};
+  navToActivityDetail({
+    detail
+  }) {
+    const {
+      index: promotionID = 0
+    } = detail || {};
     wx.navigateTo({
       url: `/pages/promotion-detail/index?promotion_id=${promotionID}`,
     });
